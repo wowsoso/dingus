@@ -1,0 +1,119 @@
+* simple test 1
+  #+ 纯函数
+  + code
+    #+begin_src Python
+        def foo():
+            return "blablabla"
+    #+end_src
+  + test
+    #+begin_src Python
+        assertEqual("blablabla", foo())
+    #+end_src
+  + file
+    [[./tests/test_simple.py][test_simple.py]]
+  
+* simple test 2
+  #+ 依赖对象由参数传递
+  + code
+    #+begin_src Python
+        def read_socket(socket):
+            data = socket.recv(1024)
+            socket.close()
+            return data
+    #+end_src
+  + test
+    #+begin_src Python
+        socket = Dingus(recv__returns="blablabla")
+        assert "blablablabla" == read_socket(socket)
+    #+end_src
+  + file
+    [[./tests/test_simple.py][test_simple.py]]
+
+* simple test 3
+  #+ 依赖于外部对象
+  + code
+    #+begin_src Python
+        def bad_read_socket():
+            data = socket.recv(1024)
+            socket.close()
+            return data
+    #+end_src
+  + test
+    #+begin_src Python
+        global socket
+        socket = Dingus(recv__returns="blablabla")
+        assert_equals("blablabla", bad_read_socket())
+        del socket
+    #+end_src
+  + file
+    [[./tests/test_simple.py][test_simple.py]]
+
+* social_master
+  + file
+    [[./tests/test_get_user.py][get_user]]
+
+
+
+
+* return value
+  + code
+    #+begin_src python
+        def foo():
+            return "blablabla"
+    #+end_src
+  + test
+    #+begin_src
+        assert_equals("blablabla", foo())
+    #+end_src
+        
+* count
+  + code
+    #+begin_src python
+        def foo(func, flag):
+            if flag:
+                func()
+                func()
+            else:
+                func()
+    #+end_src
+  + test
+    #+begin_src
+        dingus = dingus()
+        foo(dingus.func, true)
+        assert len(dingus.calls('func')) == 2
+
+        dingus = dingus()
+        foo(dingus.func, false)
+        assert len(dingus.calls('func')) == 1
+    #+end_src
+   + file
+     [[./tests/test_proc_count.py][test_proc_count.py]]
+
+* exception
+  + code
+    #+begin_src Python
+        def foo():
+            raise Exception()
+    #+end_src
+  + test
+    #+begin_src
+        @raises(Exception)
+        def test_foo():
+            foo()
+    #+end_src
+  + file
+     [[./tests/test_exception.py][test_exception.py]]
+* time
+  + code
+    #+begin_src Python
+        def foo():
+            time.sleep(.2)
+    #+end_src
+  + test
+    #+begin_src Python
+        def test_time():
+            timed(.3)(foo)()
+    #+end_src
+  + file
+     [[./tests/test_time.py][test_time.py]]
+
