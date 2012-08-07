@@ -3,6 +3,7 @@
 from dingus import Dingus
 from nose.tools import *
 
+
 def foo():
     raise Exception("error")        
 
